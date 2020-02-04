@@ -18,16 +18,16 @@ https://sprint-challenge-authenticat.herokuapp.com/api/users
 - User's projects GET
 https://sprint-challenge-authenticat.herokuapp.com/api/crud/read
 
--Users's project by Id GET
+- Users's project by Id GET
 https://sprint-challenge-authenticat.herokuapp.com/api/crud/read/id
 
--Create new project POST
+- Create new project POST
 https://sprint-challenge-authenticat.herokuapp.com/api/crud/
 
--Update project PUT 
+- Update project PUT 
 https://sprint-challenge-authenticat.herokuapp.com/api/crud/id
 
--Delete project DELETE
+- Delete project DELETE
 https://sprint-challenge-authenticat.herokuapp.com/api/crud/id
 
 #### Users
