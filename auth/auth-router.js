@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
 const Users = require("../users/users-model.js");
+const validate = require("./validate");
 
 // for endpoints beginning with /api/auth
 router.post("/register", (req, res) => {
@@ -17,7 +18,51 @@ router.post("/register", (req, res) => {
         });
 });
 
-router.post("/login", (req, res) => {
+router.post("/login",
+    validate.validateLogin,
+    (req, res) => {
+        const { email, password } = req.body;
+        console.log(req.headers)
+        console.log(req.body)
+
+        Users.findBy({ email })
+            .first()
+            .then(user => {
+                console.log(user)
+                if (user && bcrypt.compareSync(password, user.password)) {
+                    const token = signedToken(user);
+
+                    res.status(200).json({
+                        id: user.id,
+                        token
+                    });
+                }
+                else {
+                    res.status(401).json("Invalid credentials");
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ message: `${err}` });
+            });
+    });
+
+// Creates token
+function signedToken(user) {
+    const payload = {
+        subject: user.id,
+        username: user.email,
+    };
+
+    const secret = process.env.JWT_SECRET || "stay secret";
+
+    const options = {
+        expiresIn: "1h"
+    }
+
+    return jwt.sign(payload, secret, options);
+}
+/*router.post("/login", (req, res) => {
     let { username, email, password } = req.body;
 
     Users.findBy({ email })
@@ -55,5 +100,5 @@ router.post("/logout", (req, res) => {
         res.status(204);
     }
 });
-
+*/
 module.exports = router;

@@ -6,9 +6,6 @@ https://sprint-challenge-authenticat.herokuapp.com/api/auth/register
 - Login  POST
 https://sprint-challenge-authenticat.herokuapp.com/api/auth/login
 
-- Logout POST
-https://sprint-challenge-authenticat.herokuapp.com/api/auth/logout
-
 - All projects GET
 https://sprint-challenge-authenticat.herokuapp.com/api/projects
 

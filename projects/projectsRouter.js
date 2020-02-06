@@ -22,25 +22,17 @@ router.get('/', (req, res) => {
 });
 
 router.get('/read', (req, res) => {
-    let { email, password } = req.body;
-    Users.findBy({ email })
-        .first()
-        .then(user => {
-            Project.findByUserId(user.id) // return a promise
-                .then(data => {
-                    res.status(200).json(data);
-                })
-                .catch(error => {
-                    console.log(error);
-                    // handle the error
-                    res.status(500).json({
-                        errorMessage: 'The Account information could not be retrieved.',
-                    });
-                });
-            
+    let id = req.token.subject;
+    Project.findByUserId(id) 
+        .then(data => {
+            res.status(200).json(data);
         })
         .catch(error => {
-            res.status(500).json(error);
+            console.log(error);
+                    // handle the error
+            res.status(500).json({
+                errorMessage: 'The Account information could not be retrieved.',
+            });
         });
 });
 
@@ -65,28 +57,19 @@ router.get('/read/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+    let id = req.token.subject;
     const changes = req.body;
-    let email = req.body.email;
-    Users.findBy({ email })
-        .first()
-        .then(user => {
-            console.log("AAAA");
-            changes.user_id = user.id;
-            Project.add(changes)
-                .then(data => {
-                    console.log(data);
-                    res.status(201).json(data);
-                })
-                .catch(error => {
-                    console.log(error);
-                    res.status(500).json({
-                        errorMessage: 'sorry, we ran into an error creating the Account',
-                    });
-                });
-
+    changes.user_id = id;
+    Project.add(changes)
+        .then(data => {
+            console.log(data);
+            res.status(201).json(data);
         })
         .catch(error => {
-            res.status(500).json(error);
+            console.log(error);
+            res.status(500).json({
+                errorMessage: 'sorry, we ran into an error creating the Account',
+            });
         });
 });
 
